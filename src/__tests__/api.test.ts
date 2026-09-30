@@ -20,15 +20,15 @@ describe('baseUrl', () => {
 });
 
 describe('resolveToken', () => {
-  it('prefers DEPLLO_TOKEN from the env', () => {
+  it('prefers DEPLLO_TOKEN from the env', async () => {
     process.env.DEPLLO_TOKEN = 'tok_123';
-    expect(resolveToken()).toBe('tok_123');
+    expect(await resolveToken()).toBe('tok_123');
   });
 
-  it('returns null when no token is available', () => {
+  it('returns null when no token is available', async () => {
     delete process.env.DEPLLO_TOKEN;
     // No session file in the test env → null (HOME points at a tmp dir in CI).
     process.env.HOME = '/nonexistent-depllo-test-home';
-    expect(resolveToken()).toBeNull();
+    expect(await resolveToken()).toBeNull();
   });
 });
