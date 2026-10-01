@@ -797,6 +797,175 @@ export const API_ROUTES: Array<{ area: string; routes: Route[] }> = [
     "body": null
    }
   ]
+ },
+ {
+  "area": "webhook-deliveries",
+  "routes": [
+   {
+    "name": "get",
+    "method": "GET",
+    "path": "/api/v1/webhook-deliveries/{id}",
+    "summary": "Get a webhook delivery, with every attempt made at it.",
+    "pathParams": [
+     "id"
+    ],
+    "query": [],
+    "body": null
+   },
+   {
+    "name": "list",
+    "method": "GET",
+    "path": "/api/v1/webhook-deliveries",
+    "summary": "List webhook deliveries, newest first: status (pending, succeeded, failed), attempt count, next retry, the body sent and every attempt made (`attemptLog`).",
+    "pathParams": [],
+    "query": [
+     {
+      "name": "limit",
+      "kind": "number",
+      "required": false
+     },
+     {
+      "name": "cursor",
+      "kind": "string",
+      "required": false
+     },
+     {
+      "name": "endpointId",
+      "kind": "string",
+      "required": false
+     },
+     {
+      "name": "status",
+      "kind": "string",
+      "required": false,
+      "choices": [
+       "pending",
+       "succeeded",
+       "failed"
+      ]
+     },
+     {
+      "name": "type",
+      "kind": "string",
+      "required": false
+     }
+    ],
+    "body": null
+   },
+   {
+    "name": "retry",
+    "method": "POST",
+    "path": "/api/v1/webhook-deliveries/{id}/retry",
+    "summary": "Retry a webhook delivery: one more attempt now at a failed delivery (or send a succeeded one again).",
+    "pathParams": [
+     "id"
+    ],
+    "query": [],
+    "body": null
+   }
+  ]
+ },
+ {
+  "area": "webhook-endpoints",
+  "routes": [
+   {
+    "name": "create",
+    "method": "POST",
+    "path": "/api/v1/webhook-endpoints",
+    "summary": "Register a webhook endpoint.",
+    "pathParams": [],
+    "query": [],
+    "body": [
+     {
+      "name": "url",
+      "kind": "string",
+      "required": true
+     },
+     {
+      "name": "events",
+      "kind": "array",
+      "required": false
+     },
+     {
+      "name": "description",
+      "kind": "string",
+      "required": false
+     }
+    ]
+   },
+   {
+    "name": "delete",
+    "method": "DELETE",
+    "path": "/api/v1/webhook-endpoints/{id}",
+    "summary": "Delete a webhook endpoint and its delivery log.",
+    "pathParams": [
+     "id"
+    ],
+    "query": [],
+    "body": null
+   },
+   {
+    "name": "event-types",
+    "method": "GET",
+    "path": "/api/v1/webhook-endpoints/event-types",
+    "summary": "The event types an endpoint can subscribe to, with what each reports.",
+    "pathParams": [],
+    "query": [],
+    "body": null
+   },
+   {
+    "name": "get",
+    "method": "GET",
+    "path": "/api/v1/webhook-endpoints/{id}",
+    "summary": "Get a webhook endpoint.",
+    "pathParams": [
+     "id"
+    ],
+    "query": [],
+    "body": null
+   },
+   {
+    "name": "list",
+    "method": "GET",
+    "path": "/api/v1/webhook-endpoints",
+    "summary": "List the workspace's webhook endpoints, newest first.",
+    "pathParams": [],
+    "query": [],
+    "body": null
+   },
+   {
+    "name": "update",
+    "method": "PATCH",
+    "path": "/api/v1/webhook-endpoints/{id}",
+    "summary": "Update a webhook endpoint. `active: false` pauses it (its queued deliveries become failed); `active: true` re-enables it — also after Depllo switched it off for failing — and clears its failure streak",
+    "pathParams": [
+     "id"
+    ],
+    "query": [],
+    "body": [
+     {
+      "name": "url",
+      "kind": "string",
+      "required": false
+     },
+     {
+      "name": "events",
+      "kind": "array",
+      "required": false
+     },
+     {
+      "name": "description",
+      "kind": "string",
+      "required": false
+     },
+     {
+      "name": "active",
+      "kind": "boolean",
+      "required": false
+     }
+    ]
+   }
+  ]
  }
 ];
 

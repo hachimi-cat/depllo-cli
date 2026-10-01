@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.0
+- `depllo api webhook-endpoints create | list | get | update | delete | event-types` and `depllo api webhook-deliveries list | get | retry`: manage webhook endpoints and read or retry their deliveries.
+
 ## 0.2.0
 - A route read by id next to its list is named `get` + the list's name: `depllo api projects get-pipelines` (was `depllo api projects pipelines-2`). Each old name still works, hidden from help.
 
