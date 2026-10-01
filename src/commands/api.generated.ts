@@ -7,7 +7,7 @@ import { callRoute, failRoute } from '../lib/apigen-call.js';
 
 type Kind = 'string' | 'number' | 'boolean' | 'array' | 'json';
 interface Field { name: string; kind: Kind; required: boolean; choices?: string[] }
-interface Route { name: string; method: string; path: string; summary: string; pathParams: string[]; query: Field[]; body: Field[] | null }
+interface Route { name: string; aliases?: string[]; method: string; path: string; summary: string; pathParams: string[]; query: Field[]; body: Field[] | null }
 
 export const API_ROUTES: Array<{ area: string; routes: Route[] }> = [
  {
@@ -464,6 +464,21 @@ export const API_ROUTES: Array<{ area: string; routes: Route[] }> = [
     "body": null
    },
    {
+    "name": "get-pipelines",
+    "method": "GET",
+    "path": "/api/v1/projects/{id}/pipelines/{iid}",
+    "summary": "Get a pipeline",
+    "pathParams": [
+     "id",
+     "iid"
+    ],
+    "query": [],
+    "body": null,
+    "aliases": [
+     "pipelines-2"
+    ]
+   },
+   {
     "name": "list",
     "method": "GET",
     "path": "/api/v1/projects",
@@ -502,18 +517,6 @@ export const API_ROUTES: Array<{ area: string; routes: Route[] }> = [
       "required": false
      }
     ],
-    "body": null
-   },
-   {
-    "name": "pipelines-2",
-    "method": "GET",
-    "path": "/api/v1/projects/{id}/pipelines/{iid}",
-    "summary": "Get a pipeline",
-    "pathParams": [
-     "id",
-     "iid"
-    ],
-    "query": [],
     "body": null
    },
    {
@@ -822,7 +825,8 @@ export function buildApiCommand(): Command {
   for (const { area, routes } of API_ROUTES) {
     const group = new Command(area).description(`${area} routes`);
     for (const route of routes) {
-      const cmd = new Command(route.name).description(`${route.summary} (${route.method} ${route.path})`);
+      for (const name of [route.name, ...(route.aliases ?? [])]) {
+      const cmd = new Command(name).description(`${route.summary} (${route.method} ${route.path})`);
       for (const p of route.pathParams) cmd.argument(`<${p}>`);
       const fields = [...route.query, ...(route.body ?? [])];
       for (const f of fields) {
@@ -856,7 +860,8 @@ export function buildApiCommand(): Command {
           await failRoute(command, err);
         }
       });
-      group.addCommand(cmd);
+      group.addCommand(cmd, { hidden: name !== route.name });
+      }
     }
     api.addCommand(group);
   }

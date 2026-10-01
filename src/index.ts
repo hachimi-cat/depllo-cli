@@ -11,7 +11,7 @@ const brand = process.env.DEPLLO ?? 'depllo';
 const program = new Command()
   .name(brand)
   .description(`CLI for ${brand} — GitLab-CI-style CI/CD for your GitHub repos.`)
-  .version('0.1.3');
+  .version('0.2.0');
 
 program.addCommand(auth);
 program.addCommand(projects);
